@@ -1,39 +1,12 @@
-import { Input } from "@/components/ui/input"
-import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input";
+import React from "react";
 
-interface OutlineFormFieldProps {
-    control: any;
-    name: string;
-    placeholder?: string;
-    type?: string;
-}
-
-export default function OutlineFormField({ control, name, placeholder = 'Enter text', type = 'text' }: OutlineFormFieldProps) {
-    return (
-        <FormField
-            control={control}
-            name={name}
-            render={({ field }) => (
-                <FormItem className="relative">
-                    <FormControl>
-                        <OutlineInput
-                            {...field}
-                            type={type}
-                            placeholder={placeholder}
-                        />
-                    </FormControl>
-                    <FormMessage />
-                </FormItem>
-            )}
-        />
-    )
-}
-
-function OutlineInput({ ...props }) {
+const OutlineInput = React.forwardRef<HTMLInputElement, any>(({ ...props }, ref) => {
     return (
         <div className="relative">
             <Input
                 {...props}
+                ref={ref}  // Forward the ref to the Input component
                 className={`
                     peer
                     text-xs
@@ -41,7 +14,8 @@ function OutlineInput({ ...props }) {
                     peer-placeholder-shown:placeholder-gray-400
                     peer-focus:placeholder-transparent
                 `}
-                placeholder={""} // Hides the default placeholder
+                autoComplete="off"  // Disables autocomplete
+                placeholder=""  // Hides the default placeholder
             />
             <span
                 className={`
@@ -62,5 +36,10 @@ function OutlineInput({ ...props }) {
                 {props.placeholder} {/* This acts as the floating label */}
             </span>
         </div>
-    )
-}
+    );
+});
+
+// Optional but useful for debugging
+OutlineInput.displayName = "OutlineInput";
+
+export default OutlineInput;
